@@ -1,1 +1,7 @@
 .env
+Whisper-Faster/*
+.cache/*
+result.md
+*.mkv
+*.mp4
+*.srt
