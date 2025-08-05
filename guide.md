@@ -1,1 +1,0 @@
-.\Whisper-Faster\whisper-faster.exe --batch_recursive=True 
