@@ -1,4 +1,80 @@
-.\Whisper-Faster\whisper-faster.exe --batch_recursive=True 
+.\Whisper-Faster\whisper-faster.exe --batch_recursive 
+
+자주 쓰는 Whisper-Faster 주요 옵션
+1. 모델 지정
+기본: small 또는 설치된 사전 지정 모델
+예시:
+Code
+--model medium
+크기별 성능: tiny < base < small < medium < large (클수록 정확하고 느림)
+2. GPU 사용/연산 장치 지정
+예시:
+Code
+--device cuda
+CUDA가 깔린 NVIDIA GPU면 자동 감지하는 경우가 많지만, 명시적으로 쓸 수 있음.
+CPU만 쓸 땐:
+Code
+--device cpu
+3. 출력 형식 지정
+예시:
+Code
+--output_format srt
+txt, srt, vtt, lrc, json, tsv, all 등 다양
+(여러 개 원하면 all)
+4. 출력 폴더 지정
+예시:
+Code
+--output_dir "C:\output"
+지정 안 하면 입력 파일 폴더로 출력됨.
+5. 결과 언어번역 or 자동 감지
+언어 지정 고정 (한국어 오디오라면):
+Code
+--language ko
+번역 (영어로):
+Code
+--task translate
+자동감지하고 텍스트 추출: 기본값.
+6. 시간정보 포함(워드타임스탬프)
+Code
+--word_timestamps
+단어 단위 타임스탬프 정보 함께 출력(srt 아닐 때 유용)
+7. 처리 성능(스레드, 배치, chunk)
+스레드 수(고성능 CPU에서):
+Code
+--threads 8
+chunk 길이(짧게 끊어 처리):
+Code
+--chunk_length 30
+→ 초 단위, 길수록 메모리 많이, 짧을수록 쪼개서 정확성 높임
+8. VAD(음성활동감지) 필터
+소음 구간 등 자동으로 skip
+Code
+--vad_filter
+9. 기타 자주 활용 예시 조합
+영어로 번역해서 srt로 출력:
+sh
+.\Whisper-Faster\whisper-faster.exe --model large --output_format srt --task translate --language en "yourfile.mkv"
+파일 여러 개 한번에 하위폴더까지:
+sh
+.\Whisper-Faster\whisper-faster.exe --batch_recursive --output_format all "C:\folder\to\transcribe"
+GPU 강제 사용, 한국어 음성만 변환, 출력 txt+json:
+sh
+.\Whisper-Faster\whisper-faster.exe --device cuda --language ko --output_format all "yourfile.mkv"
+옵션 빠른 목록
+옵션	설명	예시
+--model	모델 크기	--model medium-large
+--device	연산장치(GPU/CPU)	--device cuda
+--output_format	결과파일 형식	--output_format srt
+--output_dir	결과 저장폴더	--output_dir "out"
+--language	음성 언어 고정	--language ko
+--task	번역/필사	--task translate (번역)
+--word_timestamps	워드시각 포함	--word_timestamps
+--vad_filter	음성구간만 자동처리	--vad_filter
+--threads	CPU 스레드 개수	--threads 8
+--chunk_length	분할 길이(초)	--chunk_length 30
+--output_dir	출력폴더	--output_dir "C:\output"
+--print_progress	작업진행률 표시	--print_progress
+
 
 PS C:\workspace\ai-cli-prompts> .\Whisper-Faster\whisper-faster.exe --help
 usage: whisper-faster.exe [-h] [--model MODEL] [--model_dir MODEL_DIR] [--device DEVICE] [--output_dir OUTPUT_DIR]
