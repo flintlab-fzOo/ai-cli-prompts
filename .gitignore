@@ -7,9 +7,7 @@ result.md
 *.mkv
 *.mp4
 *.mp3
-*.srt
 .venv/*
 .venv
-영상자막파일
 downloads
 downloads/*
