@@ -3,8 +3,9 @@ import time
 import requests
 import os
 
-model_name="gpt-oss:20b"
-# model_name="qwen3:14b"
+from ai.GeminiAI import GeminiAI
+
+ollama_model_name="gpt-oss:20b"
 system_prompt_file="../prompt/영상요약프론프트.md"
 prompt_file="../영상자막파일/이 대통령 ＂모든 산재 사망사고 직보하라＂…업무 복귀 후 첫 지시 外 8⧸9(토) ⧸ SBS 8뉴스 [bgkdFpGzwBc].srt"
 result_file="./result.md"
@@ -21,20 +22,39 @@ def chat(chatmsg, system_prompt="", temperature=0.5):
             'role': 'user',
             'content': chatmsg
         })
-        
         start_time = time.time()
         res = ollama.chat(
-            model=model_name,
+            model=ollama_model_name,
             messages=messages,
             options={
                 'temperature': temperature
             }
         )
+
         end_time = time.time()
         response_time = end_time - start_time
         
         # print(res)
         return res['message']['content'], response_time
+    except Exception as e:
+        return f"오류 발생: {e}", 0
+
+def gemini(chatmsg,system_prompt="", temperature=0.5):
+    try:
+        start_time = time.time()
+        
+        geminiai = GeminiAI()
+        res = geminiai.chat(
+            model_name="gemini-2.5-pro",
+            system_instruction=system_prompt,
+            prompt=chatmsg, 
+        )
+
+        end_time = time.time()
+        response_time = end_time - start_time
+        
+        # print(res)
+        return res, response_time
     except Exception as e:
         return f"오류 발생: {e}", 0
 
@@ -52,8 +72,9 @@ def main():
             user_prompt = f.read()
 
         # Get chat completion
-        print("Ollama API를 호출합니다...")
-        response, response_time = chat(user_prompt, system_prompt)
+        print("AI 요청중...")
+        # response, response_time = chat(user_prompt, system_prompt)
+        response, response_time = gemini(user_prompt, system_prompt)
         print(f"응답 시간: {response_time:.2f}초")
 
         # Save result to file

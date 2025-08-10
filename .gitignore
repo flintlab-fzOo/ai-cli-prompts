@@ -11,3 +11,4 @@ result.md
 .venv
 downloads
 downloads/*
+*.pyc
